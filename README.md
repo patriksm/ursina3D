@@ -7,3 +7,6 @@ Patriks Morevs
 
 <!-- Vio:
 Man ap 14:00 jādodas pie zobārsta :( -->
+
+#Viesturs_Zeps: šis izskatās pēc nopietna projekta!
+
