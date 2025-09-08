@@ -10,6 +10,13 @@ player = FirstPersonController(
     collider='box'
 )
 
+wall1 = Entity(
+    model='cube',
+    scale=(8,5,0.5),
+    texture='assets/grass.jpg',
+    position=(20,2.5,10),
+    collider='box'
+)
 ground = Entity(
     model='cube', 
     texture='assets/grass.jpg',
