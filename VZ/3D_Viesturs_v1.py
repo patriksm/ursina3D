@@ -12,11 +12,19 @@ player = FirstPersonController(  # 01 veidojam kopējo skatu un spēlētāju
     #jump height = 10
     )
 
-ground = Entity( # 04 izveidojam pamatni un segumu
+ground = Entity( # 04 kautko blakus
     model = 'cube',
     texture = 'assets\segums1.jpg',
     collider = 'box', # 'box' (vienkārš) un 'mesh' (sarežģīts) ir kolīziju veidi
     scale = (100, 1, 200)
+)
+
+wall = Entity( # 04 izveidojam pamatni un segumu
+    model = 'cube',
+    position = (50, 50, 90),
+    texture = 'assets/mixed_brick_wall_diff_1k.jpg',
+    collider = 'box', # 'box' (vienkārš) un 'mesh' (sarežģīts) ir kolīziju veidi
+    scale = (0, 100, 200)
 )
 
 lvl = 1 
