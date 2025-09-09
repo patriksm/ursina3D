@@ -10,31 +10,33 @@ player = FirstPersonController(
     collider='box'
 )
 
-wall_left = Entity(#kreisa siena
+wall_left = Entity( #kreisa siena
     model='cube',
     scale=(1, 50, 100),
-    texture='assets/floor.jpg',
+    texture='assets/dark_brick_wall_diff_1k.jpg',
     position=(-50, 2.5, 0),
     collider='box'
 )
-wall_right = Entity(#laba siena
+
+wall_right = Entity( #laba siena
     model='cube',
     scale=(1, 50, 100),
-    texture='assets/floor.jpg',
+    texture='assets/dark_brick_wall_diff_1k.jpg',
     position=(50, 2.5, 0),
     collider='box'
 )
-wall_back = Entity(#aizmugureja siena
+
+wall_back = Entity( #aizmugureja siena
     model='cube',
     scale=(100, 50, 1),
-    texture='assets/floor.jpg',
+    texture='assets/dark_brick_wall_diff_1k.jpg',
     position=(0, 2.5, -50),
     collider='box'
 )
 
-ground = Entity(
+ground = Entity( #zeme
     model='cube', 
-    texture='assets/grass.jpg',
+    texture='assets/floor2.jpg',
     collider='box',
     scale=(100, 1, 100)
 )
@@ -60,7 +62,7 @@ for i in range(10):
     blocks.append(block)
     directions.append(1 if r < 0 else -1)
 
-goal = Entity(
+goal = Entity(#finish
     model='cube',
     texture='assets/floor.jpg',
     position=(0, 11, 55),
@@ -68,15 +70,15 @@ goal = Entity(
     collider='box'
 )
 
-pillar = Entity(
+pillar = Entity( # stabs
     model='cube',
-    texture='assets/grass.jpg',
+    texture='assets/metal_plate_diff_1k.jpg',
     position=(0, 36, 58),
     scale=(1, 50, 1)
 )
 
-mySphere = Entity(
-    color=color.gold,
+mySphere = Entity(  #sfera 
+    texture='assets/box_profile_metal_sheet_diff_1k.jpg',
     model='sphere',
     position=(0, 60, 58),
     scale=(7, 7, 7)
@@ -100,7 +102,7 @@ jump = Audio( # 06 pieslēgt audio spēlē
     autoplay = False # lai nespēlē uzreiz, ieslēdzot spēli
 )
 
-def restart_level():
+def restart_level():# restartešana
     global lvl, speed_multiplier
     lvl += 1
     speed_multiplier += 1.0   # bloku atrums
