@@ -130,9 +130,10 @@ def update():
             walk.stop()
 
 def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darbības, kas notiks. 
-    if key in ('escape', 'q'): # 03 iziet no spēles, ja ir nospiests taustiņš q
+    if key in ('escape', ): # 03 iziet no spēles, ja ir nospiests taustiņš q
         quit()
     if key == 'space':
         jump.play()
-
+    if key in ('q'):
+        restart_level()
 app.run() # 00 palaižām spēles logu
