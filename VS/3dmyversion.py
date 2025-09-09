@@ -6,22 +6,22 @@ app = Ursina()
 
 player = FirstPersonController(
     height=2,
-    speed=10,
+    speed=15,
     collider='box'
 )
 
 wall_left = Entity( #kreisa siena
     model='cube',
-    scale=(1, 50, 100),
-    texture='assets/dark_brick_wall_diff_1k.jpg',
+    scale=(1, 50, 150),
+    texture='assets/siena.jpg',
     position=(-50, 2.5, 0),
     collider='box'
 )
 
 wall_right = Entity( #laba siena
     model='cube',
-    scale=(1, 50, 100),
-    texture='assets/dark_brick_wall_diff_1k.jpg',
+    scale=(1, 50, 150),
+    texture='assets/siena.jpg',
     position=(50, 2.5, 0),
     collider='box'
 )
@@ -31,14 +31,185 @@ wall_back = Entity( #aizmugureja siena
     scale=(100, 50, 1),
     texture='assets/dark_brick_wall_diff_1k.jpg',
     position=(0, 2.5, -50),
+    #collider='box'
+)
+wall_front = Entity( #priekseja siena
+    model='cube',
+    scale=(100, 50, 1),
+    texture='assets/siena.jpg',
+    position=(0, 2.5, 75),
     collider='box'
 )
+block_1 = Entity( #block 1
+    model='cube',
+    scale=(3, 2, 3),
+    texture='assets/block.jpg',
+    position=(-40, 1.5, -65),
+    collider='box'
+)
+block_2 = Entity( #block 2
+    model='cube',
+    scale=(3, 5, 3),
+    texture='assets/block.jpg',
+    position=(-35, 1.5, -65),
+    collider='box'
+)
+block_3 = Entity( #block 3
+    model='cube',
+    scale=(3, 8, 3),
+    texture='assets/block.jpg',
+    position=(-30, 1.5, -65),
+    collider='box'
+)
+block_4 = Entity( #block 4
+    model='cube',
+    scale=(3, 11, 3),
+    texture='assets/block.jpg',
+    position=(-25, 1.5, -65),
+    collider='box'
+)
+block_5 = Entity( #block 5
+    model='cube',
+    scale=(3, 14, 3),
+    texture='assets/block.jpg',
+    position=(-20, 1.5, -65),
+    collider='box'
+)
+block_6 = Entity( #block 6
+    model='cube',
+    scale=(3, 17, 3),
+    texture='assets/block.jpg',
+    position=(-15, 1.5, -65),
+    collider='box'
+)
+block_7 = Entity( #block 7
+    model='cube',
+    scale=(3, 20, 3),
+    texture='assets/block.jpg',
+    position=(-10, 1.5, -65),
+    collider='box'
+)
+block_8 = Entity( #block 8
+    model='cube',
+    scale=(3, 23, 3),
+    texture='assets/block.jpg',
+    position=(-5, 1.5, -65),
+    collider='box'
+)
+block_9 = Entity( #block 9
+    model='cube',
+    scale=(3, 26, 3),
+    texture='assets/block.jpg',
+    position=(0, 1.5, -65),
+    collider='box'
+)
+block_10 = Entity( #block 10
+    model='cube',
+    scale=(3, 29, 3),
+    texture='assets/block.jpg',
+    position=(5, 1.5, -65),
+    collider='box'
+)
+block_11 = Entity( #block 11
+    model='cube',
+    scale=(3, 32, 3),
+    texture='assets/block.jpg',
+    position=(10, 1.5, -65),
+    collider='box'
+)
+block_12 = Entity( #block 12
+    model='cube',
+    scale=(3, 35, 3),
+    texture='assets/block.jpg',
+    position=(15, 1.5, -65),
+    collider='box'
+)
+block_13 = Entity( #block 13
+    model='cube',
+    scale=(3, 38, 3),
+    texture='assets/block.jpg',
+    position=(20, 1.5, -65),
+    collider='box'
+)
+block_14 = Entity( #block 14
+    model='cube',
+    scale=(3, 41, 3),
+    texture='assets/block.jpg',
+    position=(25, 1.5, -65),
+    collider='box'
+)
+block_15 = Entity( #block 15
+    model='cube',
+    scale=(3, 44, 3),
+    texture='assets/block.jpg',
+    position=(30, 1.5, -65),
+    collider='box'
+)
+block_16 = Entity( #block 16
+    model='cube',
+    scale=(3, 47, 3),
+    texture='assets/block.jpg',
+    position=(35, 1.5, -65),
+    collider='box'
+)
+block_17 = Entity( #block 17
+    model='cube',
+    scale=(3, 50, 3),
+    texture='assets/block.jpg',
+    position=(40, 1.5, -65),
+    collider='box'
+)
+block_18 = Entity( #block 18
+    model='cube',
+    scale=(5, 53, 5),
+    texture='assets/block.jpg',
+    position=(45, 1.5, -65),
+    collider='box'
+)
+block_19 = Entity( #block 19
+    model='cube',
+    scale=(5, 53, 5),
+    texture='assets/block.jpg',
+    position=(45, 1.5, -60),
+    collider='box'
+)
+block_20 = Entity( #block 20
+    model='cube',
+    scale=(5, 53, 5),
+    texture='assets/block.jpg',
+    position=(45, 1.5, -55),
+    collider='box'
+)
+
+block_list = [
+    block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8,
+    block_9, block_10, block_11, block_12, block_13, block_14, block_15,
+    block_16, block_17, block_18, block_19, block_20
+]
+
+coins = []
+score = 0
+score_text = Text(
+    text=f"Coins: {score}",
+    origin=(-13, 17),
+    color=color.yellow
+)
+
+for block in block_list:
+    coin = Entity(
+        model='sphere',
+        color=color.gold,
+        scale=0.5,
+        position=(block.x, block.y + block.scale_y/2 + 0.5, block.z),
+        collider='box'
+    )
+    coins.append(coin)
 
 ground = Entity( #zeme
     model='cube', 
     texture='assets/floor2.jpg',
     collider='box',
-    scale=(100, 1, 100)
+    scale=(100, 1, 150)
 )
 
 lvl = 1
@@ -61,7 +232,7 @@ for i in range(10):
     )
     blocks.append(block)
     directions.append(1 if r < 0 else -1)
-
+       
 goal = Entity(#finish
     model='cube',
     texture='assets/floor.jpg',
@@ -102,14 +273,30 @@ jump = Audio( # 06 pieslēgt audio spēlē
     autoplay = False # lai nespēlē uzreiz, ieslēdzot spēli
 )
 
+coin_sound = Audio(
+    'assets/coin.mp3',
+    loop = False,
+    autoplay = False
+)
+
 def restart_level():# restartešana
     global lvl, speed_multiplier
     lvl += 1
     speed_multiplier += 1.0   # bloku atrums
     player.position = (0, 2, 0)   # restart position uz 0
-   
+    for coin in coins:
+        coin.enabled = True
 
 def update():
+    global score
+
+    for coin in coins:
+        if coin.enabled and player.intersects(coin).hit:
+            coin.enabled = False  # moneta pazud
+            score += 1
+            score_text.text = f"Coins: {score}"
+            coin_sound.play()
+
     i = 0
     for block in blocks:
         block.x -= directions[i] * time.dt * speed_multiplier
