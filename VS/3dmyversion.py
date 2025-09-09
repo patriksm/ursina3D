@@ -10,13 +10,28 @@ player = FirstPersonController(
     collider='box'
 )
 
-wall1 = Entity(
+wall_left = Entity(#kreisa siena
     model='cube',
-    scale=(8,5,0.5),
-    texture='assets/grass.jpg',
-    position=(20,2.5,10),
+    scale=(1, 50, 100),
+    texture='assets/floor.jpg',
+    position=(-50, 2.5, 0),
     collider='box'
 )
+wall_right = Entity(#laba siena
+    model='cube',
+    scale=(1, 50, 100),
+    texture='assets/floor.jpg',
+    position=(50, 2.5, 0),
+    collider='box'
+)
+wall_back = Entity(#aizmugureja siena
+    model='cube',
+    scale=(100, 50, 1),
+    texture='assets/floor.jpg',
+    position=(0, 2.5, -50),
+    collider='box'
+)
+
 ground = Entity(
     model='cube', 
     texture='assets/grass.jpg',
@@ -47,7 +62,7 @@ for i in range(10):
 
 goal = Entity(
     model='cube',
-    texture='assets/grass.jpg',
+    texture='assets/floor.jpg',
     position=(0, 11, 55),
     scale=(10, 1, 10),
     collider='box'
