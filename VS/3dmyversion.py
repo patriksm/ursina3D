@@ -190,9 +190,11 @@ block_list = [
 coins = []
 score = 0
 score_text = Text(
-    text=f"Coins: {score}",
-    origin=(-13, 17),
-    color=color.yellow
+    text=f"Nauda: {score}",
+    scale = 2, #zimes izmers
+    position = (-0.75, 0.45), # zimes pozicija
+    origin=(0, 0),
+    color=color.green
 )
 
 for block in block_list:
@@ -315,7 +317,7 @@ def update():
             mySphere.rotation_y += 100 * time.dt   
 
     for block in block_list: #secrel lvl bloku griesana
-        block.rotation_y += 20 * time.dt
+        block.rotation_y += -50 * time.dt
     
     if player.z > 56 and player.y > 10:
         restart_level()
