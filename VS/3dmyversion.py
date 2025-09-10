@@ -5,7 +5,7 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 app = Ursina()
 
 player = FirstPersonController(
-    height=2,
+    height=3,
     speed=15,
     collider='box'
 )
@@ -335,13 +335,14 @@ def update():
                block.y -= -5 * time.dt   # bloki lido)
                block.rotation_y += 100 * time.dt  #bloku griesana 
 
-    for block in block_list: #secrel lvl bloku griesana
+    for block in block_list[:-3]: #secrel lvl bloku griesana
         block.rotation_y += -50 * time.dt
     
     if player.z > 56 and player.y > 10:
         restart_level()
     sky.texture = 'sky_sunset'
     walking = held_keys['w'] or held_keys['a'] or held_keys['s'] or held_keys['d']
+    
     if walking and player.grounded:
         if not walk.playing:
             walk.play()
