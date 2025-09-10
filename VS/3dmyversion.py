@@ -41,119 +41,119 @@ wall_front = Entity( #priekseja siena
     collider='box'
 )
 block_1 = Entity( #block 1
-    model='cube',
+    model='sphere',
     scale=(3, 2, 3),
     texture='assets/block.jpg',
     position=(-40, 1.5, -65),
     collider='box'
 )
 block_2 = Entity( #block 2
-    model='cube',
+    model='sphere',
     scale=(3, 5, 3),
     texture='assets/block.jpg',
     position=(-35, 1.5, -65),
     collider='box'
 )
 block_3 = Entity( #block 3
-    model='cube',
+    model='sphere',
     scale=(3, 8, 3),
     texture='assets/block.jpg',
     position=(-30, 1.5, -65),
     collider='box'
 )
 block_4 = Entity( #block 4
-    model='cube',
+    model='sphere',
     scale=(3, 11, 3),
     texture='assets/block.jpg',
     position=(-25, 1.5, -65),
     collider='box'
 )
 block_5 = Entity( #block 5
-    model='cube',
+    model='sphere',
     scale=(3, 14, 3),
     texture='assets/block.jpg',
     position=(-20, 1.5, -65),
     collider='box'
 )
 block_6 = Entity( #block 6
-    model='cube',
+    model='sphere',
     scale=(3, 17, 3),
     texture='assets/block.jpg',
     position=(-15, 1.5, -65),
     collider='box'
 )
 block_7 = Entity( #block 7
-    model='cube',
+    model='sphere',
     scale=(3, 20, 3),
     texture='assets/block.jpg',
     position=(-10, 1.5, -65),
     collider='box'
 )
 block_8 = Entity( #block 8
-    model='cube',
+    model='sphere',
     scale=(3, 23, 3),
     texture='assets/block.jpg',
     position=(-5, 1.5, -65),
     collider='box'
 )
 block_9 = Entity( #block 9
-    model='cube',
+    model='sphere',
     scale=(3, 26, 3),
     texture='assets/block.jpg',
     position=(0, 1.5, -65),
     collider='box'
 )
 block_10 = Entity( #block 10
-    model='cube',
+    model='sphere',
     scale=(3, 29, 3),
     texture='assets/block.jpg',
     position=(5, 1.5, -65),
     collider='box'
 )
 block_11 = Entity( #block 11
-    model='cube',
+    model='sphere',
     scale=(3, 32, 3),
     texture='assets/block.jpg',
     position=(10, 1.5, -65),
     collider='box'
 )
 block_12 = Entity( #block 12
-    model='cube',
+    model='sphere',
     scale=(3, 35, 3),
     texture='assets/block.jpg',
     position=(15, 1.5, -65),
     collider='box'
 )
 block_13 = Entity( #block 13
-    model='cube',
+    model='sphere',
     scale=(3, 38, 3),
     texture='assets/block.jpg',
     position=(20, 1.5, -65),
     collider='box'
 )
 block_14 = Entity( #block 14
-    model='cube',
+    model='sphere',
     scale=(3, 41, 3),
     texture='assets/block.jpg',
     position=(25, 1.5, -65),
     collider='box'
 )
 block_15 = Entity( #block 15
-    model='cube',
+    model='sphere',
     scale=(3, 44, 3),
     texture='assets/block.jpg',
     position=(30, 1.5, -65),
     collider='box'
 )
 block_16 = Entity( #block 16
-    model='cube',
+    model='sphere',
     scale=(3, 47, 3),
     texture='assets/block.jpg',
     position=(35, 1.5, -65),
     collider='box'
 )
 block_17 = Entity( #block 17
-    model='cube',
+    model='sphere',
     scale=(3, 50, 3),
     texture='assets/block.jpg',
     position=(40, 1.5, -65),
@@ -214,7 +214,7 @@ ground = Entity( #zeme
 )
 
 lvl = 1
-speed_multiplier = 1.0   # platformas atrums
+speed_multiplier = 3.0   # platformas atrums
 sky = Sky() # 00 debesis
 
 blocks = []
@@ -297,8 +297,10 @@ def update():
             score += 1
             score_text.text = f"Coins: {score}"
             coin_sound.play()
-
+        #if coin.enabled: #monetas griesana
+         #   coin.rotation_y += 100 * time.dt
     i = 0
+
     for block in blocks:
         block.x -= directions[i] * time.dt * speed_multiplier
         if abs(block.x) > 5:
@@ -306,7 +308,11 @@ def update():
         if block.intersects().hit:
             player.x -= directions[i] * time.dt * speed_multiplier
         i += 1
+        #if block.enabled: #bloka griesana
+            #block.rotation_y += 100 * time.dt
 
+    #for block in block_list: #secrel lvl bloku griesana
+        #block.rotation_y += 20 * time.dt
     
     if player.z > 56 and player.y > 10:
         restart_level()
