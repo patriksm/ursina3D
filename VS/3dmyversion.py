@@ -5,7 +5,7 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 app = Ursina()
 
 player = FirstPersonController(
-    height=2,
+    height=3,
     speed=15,
     collider='box'
 )
@@ -162,21 +162,21 @@ block_17 = Entity( #block 17
 block_18 = Entity( #block 18
     model='cube',
     scale=(5, 53, 5),
-    texture='assets/block.jpg',
+    texture='assets/siena2.jpg',
     position=(45, 1.5, -65),
     collider='box'
 )
 block_19 = Entity( #block 19
     model='cube',
     scale=(5, 53, 5),
-    texture='assets/block.jpg',
+    texture='assets/siena2.jpg',
     position=(45, 1.5, -60),
     collider='box'
 )
 block_20 = Entity( #block 20
     model='cube',
     scale=(5, 53, 5),
-    texture='assets/block.jpg',
+    texture='assets/siena2.jpg',
     position=(45, 1.5, -55),
     collider='box'
 )
@@ -187,12 +187,22 @@ block_list = [
     block_16, block_17, block_18, block_19, block_20
 ]
 
+game_over_text = Text( # speles beigas teksts
+    text = "GAME OVER",
+    origin = (0,0),
+    scale = 7,
+    color = color.red,
+    enabled = False   
+)
+
 coins = []
 score = 0
 score_text = Text(
-    text=f"Coins: {score}",
-    origin=(-13, 17),
-    color=color.yellow
+    text=f"Nauda: {score}",
+    scale = 2, #zimes izmers
+    position = (-0.75, 0.45), # zimes pozicija
+    origin=(0, 0),
+    color=color.green
 )
 
 for block in block_list:
@@ -253,7 +263,7 @@ mySphere = Entity(  #sfera
     texture='assets/box_profile_metal_sheet_diff_1k.jpg',
     model='sphere',
     position=(0, 60, 58),
-    scale=(7, 7, 7)
+    scale=(20, 20, 20)
 )
 
 myText = Text(
@@ -281,12 +291,14 @@ coin_sound = Audio(
 )
 
 def restart_level():# restartešana
-    global lvl, speed_multiplier
+    global lvl, speed_multiplier, score
     lvl += 1
     speed_multiplier += 1.0   # bloku atrums
     player.position = (0, 2, 0)   # restart position uz 0
     for coin in coins:
         coin.enabled = True
+    score = 0
+    score_text.text = f"Nauda: {score}"
 
 def update():
     global score
@@ -295,10 +307,10 @@ def update():
         if coin.enabled and player.intersects(coin).hit:
             coin.enabled = False  # moneta pazud
             score += 1
-            score_text.text = f"Coins: {score}"
+            score_text.text = f"Nauda: {score}"
             coin_sound.play()
-        #if coin.enabled: #monetas griesana
-         #   coin.rotation_y += 100 * time.dt
+        if coin.enabled: #monetas griesana
+            coin.rotation_y += 100 * time.dt
     i = 0
 
     for block in blocks:
@@ -311,13 +323,26 @@ def update():
         #if block.enabled: #bloka griesana
             #block.rotation_y += 100 * time.dt
 
-    #for block in block_list: #secrel lvl bloku griesana
-        #block.rotation_y += 20 * time.dt
+        if mySphere.enabled: #sferas griesana
+            mySphere.rotation_y += 100 * time.dt
+
+        #if game_over_text.enabled:
+            #game_over_text.rotation_y +=20 * time.dt
+
+        if all(not coin.enabled for coin in coins):
+           game_over_text.enabled = True # teksta ieslegsana kad monetas nav
+           for block in blocks:
+               block.y -= -5 * time.dt   # bloki lido)
+               block.rotation_y += 100 * time.dt  #bloku griesana 
+
+    for block in block_list[:-3]: #secrel lvl bloku griesana
+        block.rotation_y += -50 * time.dt
     
     if player.z > 56 and player.y > 10:
         restart_level()
     sky.texture = 'sky_sunset'
     walking = held_keys['w'] or held_keys['a'] or held_keys['s'] or held_keys['d']
+    
     if walking and player.grounded:
         if not walk.playing:
             walk.play()
