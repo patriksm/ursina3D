@@ -162,21 +162,21 @@ block_17 = Entity( #block 17
 block_18 = Entity( #block 18
     model='cube',
     scale=(5, 53, 5),
-    texture='assets/block.jpg',
+    texture='assets/siena2.jpg',
     position=(45, 1.5, -65),
     collider='box'
 )
 block_19 = Entity( #block 19
     model='cube',
     scale=(5, 53, 5),
-    texture='assets/block.jpg',
+    texture='assets/siena2.jpg',
     position=(45, 1.5, -60),
     collider='box'
 )
 block_20 = Entity( #block 20
     model='cube',
     scale=(5, 53, 5),
-    texture='assets/block.jpg',
+    texture='assets/siena2.jpg',
     position=(45, 1.5, -55),
     collider='box'
 )
@@ -186,6 +186,14 @@ block_list = [
     block_9, block_10, block_11, block_12, block_13, block_14, block_15,
     block_16, block_17, block_18, block_19, block_20
 ]
+
+game_over_text = Text( # speles beigas teksts
+    text = "GAME OVER",
+    origin = (0,0),
+    scale = 7,
+    color = color.red,
+    enabled = False   
+)
 
 coins = []
 score = 0
@@ -318,7 +326,11 @@ def update():
         if mySphere.enabled: #sferas griesana
             mySphere.rotation_y += 100 * time.dt
 
+        #if game_over_text.enabled:
+            #game_over_text.rotation_y +=20 * time.dt
+
         if all(not coin.enabled for coin in coins):
+           game_over_text.enabled = True # teksta ieslegsana kad monetas nav
            for block in blocks:
                block.y -= -5 * time.dt   # bloki lido)
                block.rotation_y += 100 * time.dt  #bloku griesana 
