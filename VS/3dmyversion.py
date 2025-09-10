@@ -297,8 +297,8 @@ def update():
             score += 1
             score_text.text = f"Coins: {score}"
             coin_sound.play()
-        #if coin.enabled: #monetas griesana
-         #   coin.rotation_y += 100 * time.dt
+        if coin.enabled: #monetas griesana
+            coin.rotation_y += 100 * time.dt
     i = 0
 
     for block in blocks:
@@ -308,11 +308,14 @@ def update():
         if block.intersects().hit:
             player.x -= directions[i] * time.dt * speed_multiplier
         i += 1
-        #if block.enabled: #bloka griesana
-            #block.rotation_y += 100 * time.dt
+        if block.enabled: #bloka griesana
+            block.rotation_y += 100 * time.dt
 
-    #for block in block_list: #secrel lvl bloku griesana
-        #block.rotation_y += 20 * time.dt
+        if mySphere.enabled: #sferas griesana
+            mySphere.rotation_y += 100 * time.dt   
+
+    for block in block_list: #secrel lvl bloku griesana
+        block.rotation_y += 20 * time.dt
     
     if player.z > 56 and player.y > 10:
         restart_level()
