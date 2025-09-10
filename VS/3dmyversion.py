@@ -29,7 +29,7 @@ wall_right = Entity( #laba siena
 wall_back = Entity( #aizmugureja siena
     model='cube',
     scale=(100, 50, 1),
-    texture='assets/dark_brick_wall_diff_1k.jpg',
+    texture='assets/siena.jpg',
     position=(0, 2.5, -50),
     #collider='box'
 )
@@ -198,6 +198,7 @@ score_text = Text(
 for block in block_list:
     coin = Entity(
         model='sphere',
+        texture='coin.jpg',
         color=color.gold,
         scale=0.5,
         position=(block.x, block.y + block.scale_y/2 + 0.5, block.z),
@@ -325,4 +326,8 @@ def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darb�
         jump.play()
     if key in ('q'):
         restart_level()
+    if held_keys['shift']:
+        player.speed = 40   # speletaja paatrinasana
+    else:
+        player.speed = 15
 app.run() # 00 palaižām spēles logu
