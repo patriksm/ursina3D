@@ -225,6 +225,31 @@ ground = Entity( #zeme
     scale=(100, 1, 150)
 )
 
+controls_text = Text(
+    text=(
+        "Esc : Quit\n"
+        "Q : Restart\n"
+        "Shift : Run\n"
+        "W : Front\n"
+        "S : Back\n"
+        "A : Left\n"
+        "D : Right\n"
+        "Space : Jump"
+    ),
+    position = (-0.80, -0.35),  # koordinates
+    scale=1.2,
+    origin=(0, 0),
+    color=color.red
+)
+
+secret_level_text = Text(
+    text="Find Secret Level",
+    position = (0, 0.45),
+    scale=2,       
+    color=color.red,
+    origin=(0, 0)  
+)
+
 lvl = 1
 speed_multiplier = 3.0   # platformas atrums
 sky = Sky() # 00 debesis
@@ -292,6 +317,12 @@ coin_sound = Audio(
     autoplay = False
 )
 
+laugh_sound = Audio(
+    'assets/laugh.mp3', 
+    loop=False,
+    autoplay=False
+)
+
 def restart_level():# restartešana
     global lvl, speed_multiplier, score
     lvl += 1
@@ -299,6 +330,7 @@ def restart_level():# restartešana
     player.position = (0, 2, 0)   # restart position uz 0
     for coin in coins:
         coin.enabled = True
+    game_over_text.enabled = False
     score = 0
     score_text.text = f"Nauda: {score}"
 
@@ -333,7 +365,9 @@ def update():
             #game_over_text.rotation_y +=20 * time.dt
 
         if all(not coin.enabled for coin in coins):
-           game_over_text.enabled = True # teksta ieslegsana kad monetas nav
+           if not game_over_text.enabled:  
+               laugh_sound.play()
+               game_over_text.enabled = True # teksta ieslegsana kad monetas nav
            for block in blocks:
                block.y -= -5 * time.dt   # bloki lido)
                block.rotation_y += 100 * time.dt  #bloku griesana 
@@ -365,28 +399,5 @@ def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darb�
     else:
         player.speed = 15
 
-controls_text = Text(
-    text=(
-        "Esc : Quit\n"
-        "Q : Restart\n"
-        "Shift : Run\n"
-        "W : Front\n"
-        "S : Back\n"
-        "A : Left\n"
-        "D : Right\n"
-        "Space : Jump"
-    ),
-    position = (-0.80, -0.35),  # koordinates
-    scale=1.2,
-    origin=(0, 0),
-    color=color.red
-)
 
-secret_level_text = Text(
-    text="Find Secret Level",
-    position = (0, 0.45),
-    scale=2,       
-    color=color.red,
-    origin=(0, 0)  
-)
 app.run() # 00 palaižām spēles logu
