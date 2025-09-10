@@ -190,7 +190,9 @@ block_list = [
 ]
 
 game_over_text = Text( # speles beigas teksts
-    text = "GAME OVER",
+    text =( 
+        "GAME OVER\n"
+        "Starting format C:"),
     origin = (0,0),
     scale = 7,
     color = color.red,
