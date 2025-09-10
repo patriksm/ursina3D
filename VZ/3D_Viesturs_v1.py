@@ -43,11 +43,6 @@ wall_front = Entity( #priekseja siena
     collider ='box'
 )
 
-
-
-
-
-
 lvl = 1 
 sky = Sky() # 00 izveidojam debesis
 
@@ -82,27 +77,18 @@ score_text = Text(
     #texture = 'assets\Coin1.png'
 )
 
-for block in blocks:
+for block in blocks: #Monētas piesaistītas 'blokiem'
     coin = Entity(
-        model='sphere',
-        texture='assets\Coin1.png',
-        scale=0.5,
-        position=(block.x, block.y + block.scale_y/2 + 0.5, block.z),
-        collider='box'
-    )
+        model ='sphere',
+        texture ='assets\Coin1.png',
+        scale =0.5,
+        position = (block.x, block.y + block.scale_y/2 + 0.5, block.z),
+        collider = 'box',
+       )
+    
     coins.append(coin)
 
-# for i in range(5): #šis gabals ir no 'Violetas'a
-#     coin = Entity(
-#         model='sphere',
-#         color=color.gold,
-#         scale=1,
-#         collider='box',
-#         position=(random.uniform(-30, 30), 1, random.uniform(-30, 40))
-#     )
-#     coins.append(coin)
 
-coords_display = Text(text='Position: ', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.45)
 coins_collected = 0
 coin_display = Text(text='Coins: 0', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.40)
 
@@ -163,21 +149,22 @@ goal3 = Entity( # pēdējais pakāpiens
 pillar = Entity(
     color = color.green,
     model = 'cube',
-    position = (0, 36, 58),
-    scale = (1, 50, 1)  
+    position = (0, 24, 58),
+    scale = (1, 25, 1)  
 
 )
 
 mySphere = Entity(
     color = color.gold,
     model = 'sphere',
-    position = (0, 60, 58),
+    texture = 'assets/brick_sphere.jpg',
+    position = (0, 30, 58),
     scale = (7, 7, 7)
 )
 
 myText = Text(
     text = lvl,
-    origin = (13, -13),
+    origin = (55, -13),
     color = color.white
 )
 
@@ -195,7 +182,13 @@ jump = Audio( # 06 pieslēdzam audio spēlei
 )
 
 collect_sound = Audio(
-    'assets/coin_sound.mp3',
+    'assets\coin_sound.mp3',
+    loop = False,
+    autoplay = False
+)
+
+scream_sound = Audio ( #izveidota skaņa, jāpiešķir darbība
+    'assets\screem.mp3',
     loop = False,
     autoplay = False
 )
@@ -226,14 +219,22 @@ def update():
             walk.stop() 
 
 
-    for coin in list(coins):
+    for coin in list(coins): #Violetas kods - monētas strādā, bet negriežas
         for coin in coins:
+            if coin.enabled:
+                coin.rotation_y += 10 * time.dt
             if player.intersects(coin).hit:
                 coins_collected += 1
+                coin.enabled = False
                 coin_display.text = f'Coins: {coins_collected}'
                 coin.position = (random.uniform(-30, 30), 1, random.uniform(-30, 40))
                 collect_sound.play()
 
+        if mySphere.enabled: #sferas griesana
+            mySphere.rotation_y += 10 * time.dt #regulējam sfēras griešanos
+
+
+coords_display = Text(text='Position: ', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.45)
 coords_display.text = f'Position: {int(player.x)}, {int(player.y)}, {int(player.z)}'
   
 
