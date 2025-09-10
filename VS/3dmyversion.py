@@ -255,7 +255,7 @@ mySphere = Entity(  #sfera
     texture='assets/box_profile_metal_sheet_diff_1k.jpg',
     model='sphere',
     position=(0, 60, 58),
-    scale=(7, 7, 7)
+    scale=(20, 20, 20)
 )
 
 myText = Text(
@@ -283,12 +283,14 @@ coin_sound = Audio(
 )
 
 def restart_level():# restartešana
-    global lvl, speed_multiplier
+    global lvl, speed_multiplier, score
     lvl += 1
     speed_multiplier += 1.0   # bloku atrums
     player.position = (0, 2, 0)   # restart position uz 0
     for coin in coins:
         coin.enabled = True
+    score = 0
+    score_text.text = f"Nauda: {score}"
 
 def update():
     global score
@@ -297,7 +299,7 @@ def update():
         if coin.enabled and player.intersects(coin).hit:
             coin.enabled = False  # moneta pazud
             score += 1
-            score_text.text = f"Coins: {score}"
+            score_text.text = f"Nauda: {score}"
             coin_sound.play()
         if coin.enabled: #monetas griesana
             coin.rotation_y += 100 * time.dt
@@ -310,11 +312,16 @@ def update():
         if block.intersects().hit:
             player.x -= directions[i] * time.dt * speed_multiplier
         i += 1
-        if block.enabled: #bloka griesana
-            block.rotation_y += 100 * time.dt
+        #if block.enabled: #bloka griesana
+            #block.rotation_y += 100 * time.dt
 
         if mySphere.enabled: #sferas griesana
-            mySphere.rotation_y += 100 * time.dt   
+            mySphere.rotation_y += 100 * time.dt
+
+        #if all(not coin.enabled for coin in coins):
+          # for block in blocks:
+               #block.y -= -5 * time.dt   # bloki lido)
+              # block.rotation_y += 100 * time.dt  #bloku griesana 
 
     for block in block_list: #secrel lvl bloku griesana
         block.rotation_y += -50 * time.dt
