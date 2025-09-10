@@ -318,10 +318,10 @@ def update():
         if mySphere.enabled: #sferas griesana
             mySphere.rotation_y += 100 * time.dt
 
-        #if all(not coin.enabled for coin in coins):
-          # for block in blocks:
-               #block.y -= -5 * time.dt   # bloki lido)
-              # block.rotation_y += 100 * time.dt  #bloku griesana 
+        if all(not coin.enabled for coin in coins):
+           for block in blocks:
+               block.y -= -5 * time.dt   # bloki lido)
+               block.rotation_y += 100 * time.dt  #bloku griesana 
 
     for block in block_list: #secrel lvl bloku griesana
         block.rotation_y += -50 * time.dt
