@@ -68,11 +68,13 @@ for i in range(5):
         color=color.gold,
         scale=1,
         collider='box',
-        position=(random.uniform(-30, 30), 1, random.uniform(-30, 50))
+        position=(random.uniform(-30, 30), 1, random.uniform(-30, 40))
     )
     coins.append(coin)
 
 coords_display = Text(text='Position: ', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.45)
+coins_collected = 0
+coin_display = Text(text='Coins: 0', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.40)
 
 lvl = 1
 sky = Sky()
@@ -105,7 +107,7 @@ collect_sound = Audio('assets/coin.mp3', loop=False, autoplay=False, volume=0.5)
 space_was_pressed = False
 
 def update():
-    global lvl
+    global lvl, coins_collected, space_was_pressed
 
     i = 0
     for block in blocks:
@@ -135,13 +137,12 @@ def update():
         space_was_pressed = False
 
     for coin in list(coins):
-        if distance(player.position, coin.position) < 2:
-            destroy(coin)
-            coins.remove(coin)
-            print('Coin collected!')
-            if not collect_sound.playing:
+        for coin in coins:
+            if player.intersects(coin).hit:
+                coins_collected += 1
+                coin_display.text = f'Coins: {coins_collected}'
+                coin.position = (random.uniform(-30, 30), 1, random.uniform(-30, 40))
                 collect_sound.play()
-
 
     coords_display.text = f'Position: {int(player.x)}, {int(player.y)}, {int(player.z)}'
 
