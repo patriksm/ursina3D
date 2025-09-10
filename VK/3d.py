@@ -6,8 +6,9 @@ app = Ursina()
 
 player = FirstPersonController(
     height=4,
-    speed=10,
-    position=(22,8,-10)
+    speed=6,
+    position=(22,0,-10),
+    collider='box'
 )
 
 ground = Entity(
@@ -59,7 +60,21 @@ block2 = Entity(
     collider='box'
 )
 
+coins = []
+
+for i in range(5):
+    coin = Entity(
+        model='sphere',
+        color=color.gold,
+        scale=1,
+        collider='box',
+        position=(random.uniform(-30, 30), 1, random.uniform(-30, 40))
+    )
+    coins.append(coin)
+
 coords_display = Text(text='Position: ', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.45)
+coins_collected = 0
+coin_display = Text(text='Coins: 0', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.40)
 
 lvl = 1
 sky = Sky()
@@ -86,12 +101,13 @@ for i in range(10):
 
 music = Audio('assets/crickets.mp3', loop=True, autoplay=True, volume=0.1)
 walk_sound = Audio('assets/walking-on-grass.mp3', loop=False, autoplay=False, volume=0.2) 
-jump_sound = Audio('assets/jump.mp3', loop=False, autoplay=False, volume=0.3) 
+jump_sound = Audio('assets/jump.mp3', loop=False, autoplay=False, volume=0.3)
+collect_sound = Audio('assets/coin.mp3', loop=False, autoplay=False, volume=0.5)
 
 space_was_pressed = False
 
 def update():
-    global lvl
+    global lvl, coins_collected, space_was_pressed
 
     i = 0
     for block in blocks:
@@ -119,6 +135,14 @@ def update():
             space_was_pressed = True
     else:
         space_was_pressed = False
+
+    for coin in list(coins):
+        for coin in coins:
+            if player.intersects(coin).hit:
+                coins_collected += 1
+                coin_display.text = f'Coins: {coins_collected}'
+                coin.position = (random.uniform(-30, 30), 1, random.uniform(-30, 40))
+                collect_sound.play()
 
     coords_display.text = f'Position: {int(player.x)}, {int(player.y)}, {int(player.z)}'
 
