@@ -4,10 +4,10 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 
 app = Ursina()
 
-window.fullscreen = True # 05 pilnā ekrāna režīms
+#window.fullscreen = True # 05 pilnā ekrāna režīms
 
 player = FirstPersonController(
-    height=3,
+    height=5,
     speed=15,
     collider='box'
 )
@@ -189,6 +189,17 @@ block_list = [
     block_16, block_17, block_18, block_19, block_20
 ]
 
+portal = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(0, 2.5, 60),         
+    collider='box'
+)
+
+
+
 game_over_text = Text( # speles beigas teksts
     text =( 
         "GAME OVER\n"
@@ -336,6 +347,28 @@ def restart_level():# restartešana
     score = 0
     score_text.text = f"Nauda: {score}"
 
+def spawn_coin_field():
+    global coins, blocks
+    for block in blocks:
+        block.enabled = False
+    blocks = []
+
+    
+    coins = []
+    for i in range(50):  # monetu daudzums
+        x = uniform(-45, 45)
+        z = uniform(-45, 70)
+        y = 1  
+        coin = Entity(
+            model='sphere',
+            texture='coin.jpg',
+            color=color.gold,
+            scale=0.5,
+            position=(x, 1, z),
+            collider='box'
+        )
+        coins.append(coin)
+
 def update():
     global score
 
@@ -366,7 +399,7 @@ def update():
         #if game_over_text.enabled:
             #game_over_text.rotation_y +=20 * time.dt
 
-        if all(not coin.enabled for coin in coins):
+        if coins and all(not coin.enabled for coin in coins):
            if not game_over_text.enabled:  
                laugh_sound.play()
                game_over_text.enabled = True # teksta ieslegsana kad monetas nav
@@ -388,6 +421,11 @@ def update():
     else:
         if walk.playing:
             walk.stop()
+
+    if player.intersects(portal).hit:
+        portal.enabled = False
+        player.position = (0, 2, 70)
+        spawn_coin_field()
 
 def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darbības, kas notiks. 
     if key in ('escape', ): # 03 iziet no spēles, ja ir nospiests taustiņš q
