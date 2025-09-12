@@ -7,7 +7,7 @@ app = Ursina()
 #window.fullscreen = True # 05 pilnā ekrāna režīms
 
 player = FirstPersonController(
-    height=5,
+    height=3,
     speed=15,
     collider='box'
 )
@@ -177,7 +177,7 @@ block_19 = Entity( #block 19
 )
 block_20 = Entity( #block 20
     model='cube',
-    scale=(5, 53, 5),
+    scale=(1,53, 5),
     texture='assets/siena2.jpg',
     position=(45, 1.5, -55),
     collider='box'
@@ -189,12 +189,12 @@ block_list = [
     block_16, block_17, block_18, block_19, block_20
 ]
 
-portal = Entity(
+portal = Entity(#portal
     model='cube',
     color=color.violet,
     texture='assets/portal.jpg',   
     scale=(5, 7, 1),
-    position=(0, 2.5, 60),         
+    position=(45, 1.5, -75),         
     collider='box'
 )
 
@@ -355,7 +355,7 @@ def spawn_coin_field():
 
     
     coins = []
-    for i in range(50):  # monetu daudzums
+    for i in range(500):  # monetu daudzums
         x = uniform(-45, 45)
         z = uniform(-45, 70)
         y = 1  
