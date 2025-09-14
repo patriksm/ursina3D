@@ -116,4 +116,4 @@ def input(key): # 02 ja nospiests kāds taustiņš, šeit var programmēt darbī
     if key == 'space':
         jump.play()
 
-app.run() # 00 palaižām spēles logu
+app.run() # 00 palaižām spēles logu !
