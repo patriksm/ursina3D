@@ -8,7 +8,8 @@ player = FirstPersonController(  # 01 veidojam kopējo skatu un spēlētāju
     #strādā pogas w,a,s,d un citas komandas
     height=2,
     speed = 10,
-    collider = 'box', # spēlētāja mijiedarbība ar bloku
+    collider = 'box',
+    #player.gravity = 1 # spēlētāja mijiedarbība ar bloku
     #jump height = 10
     )
 
@@ -35,18 +36,18 @@ wall_left = Entity( #kreisa siena
     scale=(1, 100, 200)
 )
 
-wall_front = Entity( #priekseja siena
-    model ='cube',
-    position =(0, 2.5, 100),
-    texture ='assets/mixed_brick_wall_diff_1k.jpg',
-    scale =(100, 50, 1),
-    collider ='box'
-)
+# wall_front = Entity( #priekseja siena
+#     model ='cube',
+#     position =(0, 2.5, 100),
+#     texture ='assets/mixed_brick_wall_diff_1k.jpg',
+#     scale =(100, 50, 1),
+#     collider ='box'
+# )
 
 lvl = 1 
 sky = Sky() # 00 izveidojam debesis
 
-window.fullscreen = True # 05 pilnā ekrāna režīms
+#window.fullscreen = True # 05 pilnā ekrāna režīms
 
 blocks = []
 directions = []
@@ -123,7 +124,7 @@ goal3 = Entity( # pēdējais pakāpiens
 )
 
 
-goal3 = Entity( # pēdējais pakāpiens
+goal4 = Entity( # pēdējais pakāpiens
     model = 'cube',
     color = color.white,
     #texture = 'white_cube',
@@ -133,7 +134,7 @@ goal3 = Entity( # pēdējais pakāpiens
     collider = 'box'
 )
 
-goal3 = Entity( # pēdējais pakāpiens
+goal5 = Entity( # pēdējais pakāpiens
     model = 'cube',
     color = color.white,
     #texture = 'white_cube',
@@ -143,7 +144,13 @@ goal3 = Entity( # pēdējais pakāpiens
     collider = 'box'
 )
 
-
+# bullet = Entity(
+#     model='sphere',
+#     color=color.yellow,
+#     scale=0.2,
+#     colider='sphere',
+#     visible=False
+# )
 
 
 pillar = Entity(
@@ -162,39 +169,97 @@ mySphere = Entity(
     scale = (7, 7, 7)
 )
 
+gun = Entity( #Izveidojam ieroci
+    parent=camera.ui, 
+    model='cube',
+    texture='gun3.png', 
+    #color=color.black, 
+    scale=0.1, 
+    position=(0.5, -0.4),
+    rotation_z=-10,
+    origin_y=-0.5
+)
+
+# target = Entity(
+#     model='cube', 
+#     collider='box', 
+#     color=color.red, 
+#     position=(5, 1, 5)
+# )
+
+class Projectile(Entity):
+    def __init__(self, direction=Vec3(0, 0, 1), **kwargs):
+        super().__init__(
+            model='sphere',
+            collider='sphere',
+            scale=0.1,
+            color=color.white,
+            name = 'bullet_instance',
+            **kwargs
+        )
+        self.speed = 25
+        self.lifetime = 2
+        self.direction = direction
+        #self.direction = kwargs.get('direction', Vec3(0, 0, 1))
+
+
+         # Atskaņojam skaņu
+        if 'gun_shot_sound' in globals():
+            gun_shot_sound.play()
+
+    def update(self):
+        self.position += self.direction * self.speed * time.dt
+        hit_info = raycast(self.world_position, self.direction, distance=self.speed * time.dt * 2, ignore=[self, player])
+        #if hit_info.hit and hit_info.entity.name != 'bullet_instance':
+        if hit_info.hit and hit_info.entity is not self:
+                print(f'Trāpīts: {hit_info.entity.name}')
+                destroy(self)
+        
+        self.lifetime -= time.dt
+        if self.lifetime <= 0:
+           destroy(self)
+           
+
 myText = Text(
     text = lvl,
     origin = (55, -13),
     color = color.white
 )
 
+coords_display = Text(text='Position: ', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.45)
 
 walk = Audio( # 06 pieslēdzam audio spēlei
-    'assets\walking.mp3',
+    'assets/walking.mp3',
     loop = False, # lai audio neatkārtojas
     autoplay = False # lai nespēlē uzreizes, ieslēdzot spēli
 )
 
 jump = Audio( # 06 pieslēdzam audio spēlei
-    'assets\jumping_1-6452.mp3',
+    'assets/jumping_1-6452.mp3',
     loop = False, 
     autoplay = False 
 )
 
 collect_sound = Audio(
-    'assets\coin_sound.mp3',
+    'assets/coin_sound.mp3',
     loop = False,
     autoplay = False
 )
 
-scream_sound = Audio ( #izveidota skaņa, jāpiešķir darbība
-    'assets\screem.mp3',
-    loop = False,
-    autoplay = False
-)
+
+scream = Audio(
+    'assets/kliedziens.mpeg', 
+    loop=False, 
+    autoplay=False)
+
+shot_gun = Audio(
+    'assets/laser.mp3', 
+    loop=False, 
+    autoplay=False)
+
 
 def update():
-    global lvl, coins_collected #te ir mēģinājums veidot līmeņus lvl - level
+    global lvl, coins_collected, scream, shot_gun #te ir mēģinājums veidot līmeņus lvl - level
     i = 0
     for block in blocks:
         block.x -= directions[i] * time.dt
@@ -210,6 +275,10 @@ def update():
         print(myText.text)
     #sky.texture = 'sky.sunset' #Tā doma ir, ka 2.līmenī mainās debesis
 
+    if player.y < -1 and not scream.playing:
+            scream.play()
+
+
     walking = held_keys ['w'] or held_keys ['a'] or held_keys ['s'] or held_keys ['d']
     if walking and player.grounded:
         if not walk.playing:
@@ -217,7 +286,6 @@ def update():
     else:
         if walk.playing:
             walk.stop() 
-
 
     for coin in list(coins): #Violetas kods - monētas strādā, bet negriežas
         for coin in coins:
@@ -233,15 +301,20 @@ def update():
         if mySphere.enabled: #sferas griesana
             mySphere.rotation_y += 10 * time.dt #regulējam sfēras griešanos
 
+    coords_display.text = f'Position: {int(player.x)}, {int(player.y)}, {int(player.z)}'
 
-coords_display = Text(text='Position: ', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.45)
-coords_display.text = f'Position: {int(player.x)}, {int(player.y)}, {int(player.z)}'
-  
 
 def input(key): # 02 var programmēt darbības ar taustiņiem
     if key == 'escape': #iziet no spēles, ja nospiests escape, var papildināt ar or = key q
         quit()
+
     if key == 'space':
         jump.play
+
+    if key == 'left mouse down':
+        #start_position = gun.world_position
+        bullet_direction = camera.forward
+        Projectile(position=camera.position + bullet_direction * 1.5, direction=bullet_direction) 
+        shot_gun.play()
 
 app.run() # 00 izveidojam palaišanas komandu
