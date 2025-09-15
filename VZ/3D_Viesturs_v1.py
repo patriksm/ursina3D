@@ -174,8 +174,8 @@ gun = Entity( #Izveidojam ieroci
     model='cube',
     texture='gun3.png', 
     #color=color.black, 
-    scale=0.1, 
-    position=(0.5, -0.4),
+    scale=0.5, 
+    position=(0.3, -0.6),
     rotation_z=-10,
     origin_y=-0.5
 )
