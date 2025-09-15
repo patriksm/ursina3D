@@ -4,6 +4,8 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 
 app = Ursina()
 
+#window.fullscreen = True # 05 pilnā ekrāna režīms
+
 player = FirstPersonController(
     height=3,
     speed=15,
@@ -175,7 +177,7 @@ block_19 = Entity( #block 19
 )
 block_20 = Entity( #block 20
     model='cube',
-    scale=(5, 53, 5),
+    scale=(1,53, 5),
     texture='assets/siena2.jpg',
     position=(45, 1.5, -55),
     collider='box'
@@ -187,8 +189,21 @@ block_list = [
     block_16, block_17, block_18, block_19, block_20
 ]
 
+portal = Entity(#portal
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(45, 1.5, -75),         
+    collider='box'
+)
+
+
+
 game_over_text = Text( # speles beigas teksts
-    text = "GAME OVER",
+    text =( 
+        "GAME OVER\n"
+        "Starting format C:"),
     origin = (0,0),
     scale = 7,
     color = color.red,
@@ -202,7 +217,7 @@ score_text = Text(
     scale = 2, #zimes izmers
     position = (-0.75, 0.45), # zimes pozicija
     origin=(0, 0),
-    color=color.green
+    color=color.red
 )
 
 for block in block_list:
@@ -221,6 +236,31 @@ ground = Entity( #zeme
     texture='assets/floor2.jpg',
     collider='box',
     scale=(100, 1, 150)
+)
+
+controls_text = Text(
+    text=(
+        "Esc : Quit\n"
+        "Q : Restart\n"
+        "Shift : Run\n"
+        "W : Front\n"
+        "S : Back\n"
+        "A : Left\n"
+        "D : Right\n"
+        "Space : Jump"
+    ),
+    position = (-0.80, -0.35),  # koordinates
+    scale=1.2,
+    origin=(0, 0),
+    color=color.red
+)
+
+secret_level_text = Text(
+    text="Find Secret Level",
+    position = (0, 0.45),
+    scale=2,       
+    color=color.red,
+    origin=(0, 0)  
 )
 
 lvl = 1
@@ -255,14 +295,14 @@ goal = Entity(#finish
 pillar = Entity( # stabs
     model='cube',
     texture='assets/metal_plate_diff_1k.jpg',
-    position=(0, 36, 58),
-    scale=(1, 50, 1)
+    position=(0, 24, 58),
+    scale=(1, 25, 1)
 )
 
 mySphere = Entity(  #sfera 
     texture='assets/box_profile_metal_sheet_diff_1k.jpg',
     model='sphere',
-    position=(0, 60, 58),
+    position=(0, 35, 58),
     scale=(20, 20, 20)
 )
 
@@ -290,6 +330,12 @@ coin_sound = Audio(
     autoplay = False
 )
 
+laugh_sound = Audio(
+    'assets/laugh.mp3', 
+    loop=False,
+    autoplay=False
+)
+
 def restart_level():# restartešana
     global lvl, speed_multiplier, score
     lvl += 1
@@ -297,8 +343,31 @@ def restart_level():# restartešana
     player.position = (0, 2, 0)   # restart position uz 0
     for coin in coins:
         coin.enabled = True
+    game_over_text.enabled = False
     score = 0
     score_text.text = f"Nauda: {score}"
+
+def spawn_coin_field():
+    global coins, blocks
+    for block in blocks:
+        block.enabled = False
+    blocks = []
+
+    
+    coins = []
+    for i in range(500):  # monetu daudzums
+        x = uniform(-45, 45)
+        z = uniform(-45, 70)
+        y = 1  
+        coin = Entity(
+            model='sphere',
+            texture='coin.jpg',
+            color=color.gold,
+            scale=0.5,
+            position=(x, 1, z),
+            collider='box'
+        )
+        coins.append(coin)
 
 def update():
     global score
@@ -320,17 +389,20 @@ def update():
         if block.intersects().hit:
             player.x -= directions[i] * time.dt * speed_multiplier
         i += 1
+
         #if block.enabled: #bloka griesana
             #block.rotation_y += 100 * time.dt
 
         if mySphere.enabled: #sferas griesana
-            mySphere.rotation_y += 100 * time.dt
+            mySphere.rotation_y += 10 * time.dt
 
         #if game_over_text.enabled:
             #game_over_text.rotation_y +=20 * time.dt
 
-        if all(not coin.enabled for coin in coins):
-           game_over_text.enabled = True # teksta ieslegsana kad monetas nav
+        if coins and all(not coin.enabled for coin in coins):
+           if not game_over_text.enabled:  
+               laugh_sound.play()
+               game_over_text.enabled = True # teksta ieslegsana kad monetas nav
            for block in blocks:
                block.y -= -5 * time.dt   # bloki lido)
                block.rotation_y += 100 * time.dt  #bloku griesana 
@@ -350,6 +422,11 @@ def update():
         if walk.playing:
             walk.stop()
 
+    if player.intersects(portal).hit:
+        portal.enabled = False
+        player.position = (0, 2, 70)
+        spawn_coin_field()
+
 def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darbības, kas notiks. 
     if key in ('escape', ): # 03 iziet no spēles, ja ir nospiests taustiņš q
         quit()
@@ -361,4 +438,6 @@ def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darb�
         player.speed = 40   # speletaja paatrinasana
     else:
         player.speed = 15
+
+
 app.run() # 00 palaižām spēles logu
