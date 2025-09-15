@@ -89,25 +89,32 @@ myGun = Entity(
 class Target(Button):
     def __init__(self, x, y, z):
         super().__init__(
-            #color = color.gold,
-            texture = 'assets/floor.jpg',
+            color = color.gold,
+            #texture = 'assets/floor.jpg',
             parent = scene,
-            model = 'sphere',
+            model = 'bmw.glb',
             scale = 1,
             position = (x,y,z),
-            rotation = (0, 90, 0),
-            collider = 'box'
+            rotation = (0, -90, 0),
+            collider = 'mesh'
         )
+
+block = Entity(
+    position = (20, 0.5, 20),
+    model = 'bmw.glb',
+    color = colors[randint(0, len(colors)-1)],
+    scale = (2, 2, 2),
+    collider = 'mesh'
+)
 
 num = 7
 targets = [None]*num
 for i in range(num):
     tx = uniform(-50, 50)
-    ty = uniform(0.5, 5)
-    tz = uniform(-50, 50)
+    ty = 0.5
+    tz = uniform(0, 50)
     targets[i]=Target(tx, ty, tz)
-    targets[i].animate_x(tx+25, duration=10, loop=True)
-    targets[i].animate_y(tz+3, duration=10, loop=True)
+    targets[i].animate_x(tx+100, duration=10, loop=True)
 
 walk = Audio( # 06 pieslēgt audio spēlē
     'assets\walking.mp3',
