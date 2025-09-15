@@ -15,7 +15,7 @@ player = FirstPersonController(  # 01 veidojam kopējo skatu un spēlētāju
 
 ground = Entity( # 04 kautko blakus
     model = 'cube',
-    texture = 'assets\segums1.jpg',
+    texture = 'assets/segums1.jpg',
     collider = 'box', # 'box' (vienkārš) un 'mesh' (sarežģīts) ir kolīziju veidi
     scale = (100, 1, 200)
 )
@@ -78,18 +78,28 @@ score_text = Text(
     #texture = 'assets\Coin1.png'
 )
 
-for block in blocks: #Monētas piesaistītas 'blokiem'
+for block in blocks:
     coin = Entity(
-        model ='sphere',
-        texture ='assets\Coin1.png',
-        scale =0.5,
-        position = (block.x, block.y + block.scale_y/2 + 0.5, block.z),
-        collider = 'box',
-       )
-    
-    coins.append(coin)
+        model='sphere',
+        texture='assets\Coin1.png',
+        scale=0.5,
+       position=(block.x, block.y + block.scale_y/2 + 0.5, block.z),
+        collider='box',
+        
+        )
+    coins.append((block, coin))
 
+# for i in range(5): #šis gabals ir no 'Violetas'a
+#     coin = Entity(
+#         model='sphere',
+#         color=color.gold,
+#         scale=1,
+#         collider='box',
+#         position=(random.uniform(-30, 30), 1, random.uniform(-30, 40))
+#     )
+#     coins.append(coin)
 
+coords_display = Text(text='Position: ', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.45)
 coins_collected = 0
 coin_display = Text(text='Coins: 0', origin=(-0.5, 0.5), scale=1, x=-0.8, y=0.40)
 
@@ -144,28 +154,17 @@ goal5 = Entity( # pēdējais pakāpiens
     collider = 'box'
 )
 
-# bullet = Entity(
-#     model='sphere',
-#     color=color.yellow,
-#     scale=0.2,
-#     colider='sphere',
-#     visible=False
-# )
-
-
 pillar = Entity(
     color = color.green,
     model = 'cube',
-    position = (0, 24, 58),
-    scale = (1, 25, 1)  
-
+    position = (0, 36, 58),
+    scale = (1, 50, 1)
 )
 
 mySphere = Entity(
     color = color.gold,
     model = 'sphere',
-    texture = 'assets/brick_sphere.jpg',
-    position = (0, 30, 58),
+    position = (0, 60, 58),
     scale = (7, 7, 7)
 )
 
@@ -222,7 +221,7 @@ class Projectile(Entity):
 
 myText = Text(
     text = lvl,
-    origin = (55, -13),
+    origin = (13, -13),
     color = color.white
 )
 
@@ -246,7 +245,6 @@ collect_sound = Audio(
     autoplay = False
 )
 
-
 scream = Audio(
     'assets/kliedziens.mpeg', 
     loop=False, 
@@ -268,12 +266,36 @@ def update():
         if block.intersects().hit: # spēlētājs mijiedarbojas ar bloku - abiem viena kustība.
             player.x -= directions[i]*time.dt
         i += 1
-    if player.z > 56 and player.y > 10 and lvl == 1:
-        lvl = 2 #te ir mēģinājums veidot līmeņus vairākus
-        myText.text = lvl
-        player.speed = 100 #mēģinu 2.līmenī 'palielināt' ātrumu
-        print(myText.text)
+
+    for block, coin in coins:
+        if coin.enabled and player.intersects(coin).hit:
+            coins_collected += 1
+            coin_display.text = f'Coins: {coins_collected}'
+            coin.enabled = False  # moneta pazud
+            collect_sound.play()
+
+    for block, coin in coins:
+        if coin.enabled:  
+           coin.x = block.x
+           coin.z = block.z
+           coin.y = block.y + block.scale_y/2 + 0.5
+
+    # if player.z > 56 and player.y > 10 and lvl == 1:
+    #     lvl = 2 #te ir mēģinājums veidot līmeņus vairākus
+    #     myText.text = lvl
+    #     player.speed = 100 #mēģinu 2.līmenī 'palielināt' ātrumu
+    #     print(myText.text)
     #sky.texture = 'sky.sunset' #Tā doma ir, ka 2.līmenī mainās debesis
+   
+    if lvl == 1 and player.z > 56 and player.y > 10:
+        lvl = 2
+        myText.text = lvl
+        player.speed = 100
+        print(myText.text)
+
+        if not scream_played:
+            scream.play()
+            scream_played = True
 
     if player.y < -1 and not scream.playing:
             scream.play()
@@ -282,7 +304,7 @@ def update():
     walking = held_keys ['w'] or held_keys ['a'] or held_keys ['s'] or held_keys ['d']
     if walking and player.grounded:
         if not walk.playing:
-            walk.play()
+           walk.stop()
     else:
         if walk.playing:
             walk.stop() 
@@ -303,13 +325,12 @@ def update():
 
     coords_display.text = f'Position: {int(player.x)}, {int(player.y)}, {int(player.z)}'
 
-
 def input(key): # 02 var programmēt darbības ar taustiņiem
     if key == 'escape': #iziet no spēles, ja nospiests escape, var papildināt ar or = key q
         quit()
 
     if key == 'space':
-        jump.play
+        jump.play()
 
     if key == 'left mouse down':
         #start_position = gun.world_position
