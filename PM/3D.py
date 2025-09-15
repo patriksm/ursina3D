@@ -75,6 +75,40 @@ myText = Text(
     color = color.white
 )
 
+myGun = Entity(
+    color = color.gold,
+    parent = camera.ui,
+    model = 'weapon.glb',
+    position = (0.35, -0.4), 
+    rotation= (-20,-20,0),
+    #texture = 'assets/grass.jpg',
+    scale =0.3,
+    flip_faces=True
+)
+
+class Target(Button):
+    def __init__(self, x, y, z):
+        super().__init__(
+            #color = color.gold,
+            texture = 'assets/floor.jpg',
+            parent = scene,
+            model = 'sphere',
+            scale = 1,
+            position = (x,y,z),
+            rotation = (0, 90, 0),
+            collider = 'box'
+        )
+
+num = 7
+targets = [None]*num
+for i in range(num):
+    tx = uniform(-50, 50)
+    ty = uniform(0.5, 5)
+    tz = uniform(-50, 50)
+    targets[i]=Target(tx, ty, tz)
+    targets[i].animate_x(tx+25, duration=10, loop=True)
+    targets[i].animate_y(tz+3, duration=10, loop=True)
+
 walk = Audio( # 06 pieslēgt audio spēlē
     'assets\walking.mp3',
     loop = False, # lai audio neatkārtotos
@@ -115,5 +149,15 @@ def input(key): # 02 ja nospiests kāds taustiņš, šeit var programmēt darbī
         quit()
     if key == 'space':
         jump.play()
+    if key == 'left mouse down':
+        if not myGun.color == color.red:
+            myGun.color = color.red
+        else:
+            if myGun.color == color.red:
+                myGun.color = color.yellow
+        for target in targets:
+            if target.hovered:
+                destroy(target)
+            
 
 app.run() # 00 palaižām spēles logu !
