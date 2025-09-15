@@ -68,6 +68,94 @@ block2 = Entity(
     enabled=False
 )
 
+car = Entity(
+    model='car.glb',
+    scale=1,
+    position=(10,1,10),
+    collider='box',
+    enabled=False
+)
+
+
+myGun = Entity(
+    parent = camera.ui,
+    model = 'weapon.glb',
+    position = (0.45, -0.4), 
+    rotation= (10,-100,-10),
+    scale =0.7,
+    flip_faces=True,
+    enabled=False
+)
+
+game_state = 'menu'
+
+def distance_xz(a, b):
+    dx = a.x - b.x
+    dz = a.z - b.z
+    return (dx*dx + dz*dz) ** 0.5
+
+death_text = Text(
+    "YOU DIED!",
+    parent=camera.ui,
+    origin=(0,0),
+    scale=3,
+    color=color.red,
+    enabled=False,
+    position=(0,0.1),
+    z=-0.1
+)
+
+class Target(Button):
+    def __init__(self, x, y, z):
+        super().__init__(
+            parent = scene,
+            model = 'zombie.glb',
+            scale = 2,
+            position = (x,y,z),
+            rotation = (0, 0, 0),
+            collider = 'box'
+        )
+
+        self.speed = 2
+        self.attack_range = 2
+        self.attack_cooldown = 1.5
+        self.time_since_attack = 0
+        self.direction = Vec3(random.uniform(-1, 1), 0, random.uniform(-1, 1)).normalized()
+
+    def update(self):  
+        global game_state      
+        if game_state != 'playing':
+            return
+    
+        target_pos = player.world_position
+        direction_to_target = (target_pos - self.world_position).normalized()
+        distance = distance_xz(self.world_position, target_pos)
+
+        if distance > self.attack_range:
+            self.position += direction_to_target * self.speed * time.dt
+            self.look_at(target_pos)
+
+        self.time_since_attack += time.dt
+        if distance <= self.attack_range and self.time_since_attack >= self.attack_cooldown:
+            self.attack()
+            self.time_since_attack = 0
+
+    def attack(self):
+        global game_state
+        game_state = 'dead'
+        death_text.enabled = True        
+        print("Zombie killed you!")
+
+game_over = False
+
+num = 4
+targets = [None]*num
+for i in range(num):
+    tx = random.uniform(-40, 40)
+    ty = 0
+    tz = random.uniform(-40, 40)
+    targets[i]=Target(tx, ty, tz)
+
 coins = []
 
 for i in range(5):
@@ -115,6 +203,7 @@ music = Audio('assets/crickets.mp3', loop=True, autoplay=True, volume=0.1)
 walk_sound = Audio('assets/walking-on-grass.mp3', loop=False, autoplay=False, volume=0.2) 
 jump_sound = Audio('assets/jump.mp3', loop=False, autoplay=False, volume=0.3)
 collect_sound = Audio('assets/coin.mp3', loop=False, autoplay=False, volume=0.5)
+gun_sound = Audio('assets/gun-shot.mp3', loop=False, autoplay=False, volume=0.2)
 
 space_was_pressed = False
 
@@ -184,9 +273,11 @@ def start_game():
     quit_button.enabled = False
 
     wall1.enabled = True
+    car.enabled = True
     wall2.enabled = True
     brick1.enabled = True
     block1.enabled = True
+    myGun.enabled = True
     block2.enabled = True
     ground.enabled = True
     sky.enabled = True
@@ -201,7 +292,10 @@ def start_game():
     game_ui.enabled = True
 
     invoke(enable_player, delay=0.01)
-    
+
+    global game_state
+    game_state = 'playing'
+
 def quit_game():
     app.quit()
 
@@ -210,17 +304,11 @@ quit_button.on_click = quit_game
 
 pause_menu = Entity(enabled=False)
 
-resume_button = Button("Resume", scale=(0.2,0.1), y=0.1, parent=pause_menu)
-pause_quit_button = Button("Quit", scale=(0.2,0.1), y=-0.2, parent=pause_menu)
-
 def resume_game():
     pause_menu.enabled = False
     player.enabled = True
     game_ui.enabled = True
     mouse.locked = True
-
-resume_button.on_click = resume_game
-pause_quit_button.on_click = quit_game
 
 def input(key):
     if key == 'escape':
@@ -234,8 +322,16 @@ def input(key):
             game_ui.enabled = False
             mouse.locked = False
 
-# def input(key):
-#     if key == 'escape':
-#         app.quit()
+    if key == 'left mouse down':
+        if shooting := mouse.hovered_entity:
+            if shooting in targets:
+                destroy(shooting)
+                gun_sound.play()
+        if not gun_sound.playing:
+            gun_sound.play()
+
+        for target in targets:
+            if target.hovered:
+                destroy(target)
 
 app.run()
