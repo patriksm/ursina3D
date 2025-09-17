@@ -182,7 +182,78 @@ block_20 = Entity( #block 20
     position=(45, 1.5, -55),
     collider='box'
 )
-
+wall_2 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(35, 1.5, -75),         
+    collider='box'
+)
+wall_3 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(25, 1.5, -75),         
+    collider='box'
+)
+wall_4 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(15, 1.5, -75),         
+    collider='box'
+)
+wall_5 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(5, 1.5, -75),         
+    collider='box'
+)
+wall_6 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-5, 1.5, -75),         
+    collider='box'
+)
+wall_7 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-15, 1.5, -75),         
+    collider='box'
+)
+wall_8 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-25, 1.5, -75),         
+    collider='box'
+)
+wall_9 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-35, 1.5, -75),         
+    collider='box'
+)
+wall_10 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-45, 1.5, -75),         
+    collider='box'
+)
 block_list = [
     block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8,
     block_9, block_10, block_11, block_12, block_13, block_14, block_15,
