@@ -294,9 +294,9 @@ score_text = Text(
 for block in block_list:
     coin = Entity(
         model='sphere',
-        texture='coin.jpg',
+        texture='coin1.png',
         color=color.gold,
-        scale=0.5,
+        scale=(0.5, 0.5, 0.5),
         position=(block.x, block.y + block.scale_y/2 + 0.5, block.z),
         collider='box'
     )
@@ -438,9 +438,9 @@ def spawn_coin_field():
         y = 1  
         coin = Entity(
             model='sphere',
-            texture='coin.jpg',
+            texture='coin1.png',
             color=color.gold,
-            scale=0.5,
+            scale=(0.5, 0.5, 0.5),
             position=(x, 1, z),
             collider='box'
         )
