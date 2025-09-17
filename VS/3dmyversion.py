@@ -401,6 +401,12 @@ coin_sound = Audio(
     autoplay = False
 )
 
+yay_sound = Audio(
+    'assets/yay.mp3', 
+    loop=False,
+    autoplay=False
+)
+
 laugh_sound = Audio(
     'assets/laugh.mp3', 
     loop=False,
@@ -497,6 +503,7 @@ def update():
         portal.enabled = False
         player.position = (0, 2, 70)
         spawn_coin_field()
+        yay_sound.play()
 
 def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darbības, kas notiks. 
     if key in ('escape', ): # 03 iziet no spēles, ja ir nospiests taustiņš q
