@@ -182,7 +182,78 @@ block_20 = Entity( #block 20
     position=(45, 1.5, -55),
     collider='box'
 )
-
+wall_2 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(35, 1.5, -75),         
+    collider='box'
+)
+wall_3 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(25, 1.5, -75),         
+    collider='box'
+)
+wall_4 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(15, 1.5, -75),         
+    collider='box'
+)
+wall_5 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(5, 1.5, -75),         
+    collider='box'
+)
+wall_6 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-5, 1.5, -75),         
+    collider='box'
+)
+wall_7 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-15, 1.5, -75),         
+    collider='box'
+)
+wall_8 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-25, 1.5, -75),         
+    collider='box'
+)
+wall_9 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-35, 1.5, -75),         
+    collider='box'
+)
+wall_10 = Entity(
+    model='cube',
+    color=color.violet,
+    texture='assets/portal.jpg',   
+    scale=(5, 7, 1),
+    position=(-45, 1.5, -75),         
+    collider='box'
+)
 block_list = [
     block_1, block_2, block_3, block_4, block_5, block_6, block_7, block_8,
     block_9, block_10, block_11, block_12, block_13, block_14, block_15,
@@ -223,9 +294,9 @@ score_text = Text(
 for block in block_list:
     coin = Entity(
         model='sphere',
-        texture='coin.jpg',
+        texture='coin1.png',
         color=color.gold,
-        scale=0.5,
+        scale=(0.5, 0.5, 0.5),
         position=(block.x, block.y + block.scale_y/2 + 0.5, block.z),
         collider='box'
     )
@@ -330,6 +401,12 @@ coin_sound = Audio(
     autoplay = False
 )
 
+yay_sound = Audio(
+    'assets/yay.mp3', 
+    loop=False,
+    autoplay=False
+)
+
 laugh_sound = Audio(
     'assets/laugh.mp3', 
     loop=False,
@@ -361,9 +438,9 @@ def spawn_coin_field():
         y = 1  
         coin = Entity(
             model='sphere',
-            texture='coin.jpg',
+            texture='coin1.png',
             color=color.gold,
-            scale=0.5,
+            scale=(0.5, 0.5, 0.5),
             position=(x, 1, z),
             collider='box'
         )
@@ -426,6 +503,7 @@ def update():
         portal.enabled = False
         player.position = (0, 2, 70)
         spawn_coin_field()
+        yay_sound.play()
 
 def input(key):  # 02 ja nospiests kāds taustiņš, šeit var programmēt darbības, kas notiks. 
     if key in ('escape', ): # 03 iziet no spēles, ja ir nospiests taustiņš q
