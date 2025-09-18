@@ -432,7 +432,7 @@ def spawn_coin_field():
 
     
     coins = []
-    for i in range(500):  # monetu daudzums
+    for i in range(666):  # monetu daudzums
         x = uniform(-45, 45)
         z = uniform(-45, 70)
         y = 1  
